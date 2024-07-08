@@ -1,30 +1,65 @@
 /*
 Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
 )
 
-
+type Quote struct {
+	Text     string `json:"text"`
+	Category string `json:"category"`
+}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "terry",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Get quotes from computer genius Terry A. Davis",
+	Long:  `Get real quotes from computer genius and creator of TempleOS Terry A. Davis.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		cat, _ := cmd.Flags().GetString("category")
+
+		if cat != "" {
+			fmt.Println("Category:", cat, "doesn't exist")
+			return
+		}
+
+		fileContent, err := os.Open("quotes.json")
+		if err != nil {
+			log.Fatalln(err)
+			return
+		}
+		defer fileContent.Close()
+
+		byteResult, err := io.ReadAll(fileContent)
+		if err != nil {
+			log.Fatalln(err)
+			return
+		}
+
+		var quotes []Quote
+		err = json.Unmarshal(byteResult, &quotes)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		if len(quotes) == 0 {
+			fmt.Println("No quotes found")
+			return
+		}
+
+		fmt.Println(quotes[0].Text)
+		fmt.Println("― Terry A. Davis")
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -37,6 +72,7 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.Flags().StringP("category", "c", "", "Quote category")
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
@@ -45,7 +81,6 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	cobra.OnInitialize()
 }
-
-
