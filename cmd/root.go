@@ -32,22 +32,7 @@ var rootCmd = &cobra.Command{
 
 		cat, _ := cmd.Flags().GetString("category")
 		big, _ := cmd.Flags().GetBool("big")
-
-		/*fileContent, err := os.Open("./quotes.json")
-
-		if err != nil {
-			log.Fatalln(err)
-			return
-		}
-		defer fileContent.Close()
 		
-
-		byteResult, err := io.ReadAll(fileContent)
-		if err != nil {
-			log.Fatalln(err)
-			return
-		}*/
-
 		byteResult := fileContent
 
 		var quotes []Quote
