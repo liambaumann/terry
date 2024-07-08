@@ -4,14 +4,17 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	_ "embed"
 	"encoding/json"
 	"fmt"
-	"io"
-	"log"
-	"os"
-
 	"github.com/spf13/cobra"
+	"log"
+	"math/rand/v2"
+	"os"
 )
+
+//go:embed quotes.json
+var fileContent []byte
 
 type Quote struct {
 	Text     string `json:"text"`
@@ -26,30 +29,46 @@ var rootCmd = &cobra.Command{
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
+
 		cat, _ := cmd.Flags().GetString("category")
+		big, _ := cmd.Flags().GetBool("big")
 
-		if cat != "" {
-			fmt.Println("Category:", cat, "doesn't exist")
-			return
-		}
+		/*fileContent, err := os.Open("./quotes.json")
 
-		fileContent, err := os.Open("quotes.json")
 		if err != nil {
 			log.Fatalln(err)
 			return
 		}
 		defer fileContent.Close()
+		
 
 		byteResult, err := io.ReadAll(fileContent)
 		if err != nil {
 			log.Fatalln(err)
 			return
-		}
+		}*/
+
+		byteResult := fileContent
 
 		var quotes []Quote
-		err = json.Unmarshal(byteResult, &quotes)
+		err := json.Unmarshal(byteResult, &quotes)
 		if err != nil {
 			log.Fatalln(err)
+		}
+
+		if cat != "" && !catValid(cat) {
+			fmt.Println("Category:", cat, "doesn't exist")
+			return
+		}
+
+		if catValid(cat) {
+			var filtered []Quote
+			for _, quote := range quotes {
+				if quote.Category == cat {
+					filtered = append(filtered, quote)
+				}
+			}
+			quotes = filtered
 		}
 
 		if len(quotes) == 0 {
@@ -57,8 +76,17 @@ var rootCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Println(quotes[0].Text)
-		fmt.Println("― Terry A. Davis")
+		index := rand.Int() % len(quotes)
+
+		fmt.Print("\"")
+		fmt.Print(quotes[index].Text)
+		fmt.Println("\"")
+
+		if big == false {
+			fmt.Println("― Terry A. Davis")
+			return
+		}
+		fmt.Println(beautify())
 	},
 }
 
@@ -72,7 +100,8 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().StringP("category", "c", "", "Quote category")
+	rootCmd.Flags().StringP("category", "c", "", "Filter quotes by category")
+	rootCmd.Flags().BoolP("big", "b", false, "Write Terry A. Davis' Name in big ASCII art")
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
@@ -83,4 +112,16 @@ func init() {
 	// when this action is called directly.
 	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	cobra.OnInitialize()
+}
+
+// Helper function:
+func catValid(cat string) bool {
+	if cat == "crazy" || cat == "cia" || cat == "confused" || cat == "racist" || cat == "deep" || cat == "technical" {
+		return true
+	}
+	return false
+}
+
+func beautify() string {
+	return "  _______                                  _____              _     \n |__   __|                       /\\       |  __ \\            (_)    \n    | | ___ _ __ _ __ _   _     /  \\      | |  | | __ ___   ___ ___ \n    | |/ _ \\ '__| '__| | | |   / /\\ \\     | |  | |/ _` \\ \\ / / / __|\n    | |  __/ |  | |  | |_| |  / ____ \\ _  | |__| | (_| |\\ V /| \\__ \\\n    |_|\\___|_|  |_|   \\__, | /_/    \\_(_) |_____/ \\__,_| \\_/ |_|___/\n                       __/ |                                        \n                      |___/                                         "
 }
