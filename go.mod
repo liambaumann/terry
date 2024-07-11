@@ -1,6 +1,6 @@
 module github.com/MartinJindra/terry
 
-go 1.23
+go 1.22.3
 
 require (
 	fyne.io/fyne/v2 v2.4.5
