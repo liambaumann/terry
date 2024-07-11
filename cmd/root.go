@@ -31,8 +31,8 @@ var rootCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		var quotes []quotes.Quote
-		err = json.Unmarshal(byteResult, &quotes)
+		var quoteList []quotes.Quote
+		err = json.Unmarshal(byteResult, &quoteList)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -44,23 +44,23 @@ var rootCmd = &cobra.Command{
 
 		if catValid(cat) {
 			var filtered []quotes.Quote
-			for _, quote := range quotes {
+			for _, quote := range quoteList {
 				if quote.Category == cat {
 					filtered = append(filtered, quote)
 				}
 			}
-			quotes = filtered
+			quoteList = filtered
 		}
 
-		if len(quotes) == 0 {
+		if len(quoteList) == 0 {
 			fmt.Println("No quotes found")
 			return
 		}
 
-		index := rand.Int() % len(quotes)
+		index := rand.Int() % len(quoteList)
 
 		fmt.Print("\"")
-		fmt.Print(quotes[index].Text)
+		fmt.Print(quoteList[index].Text)
 		fmt.Println("\"")
 
 		if big == false {

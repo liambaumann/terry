@@ -28,21 +28,21 @@ func Execute() {
 		return
 	}
 
-	var quotes []quotes.Quote
-	err = json.Unmarshal(byteResults, &quotes)
+	var quoteList []quotes.Quote
+	err = json.Unmarshal(byteResults, &quoteList)
 	if err != nil {
 		log.Fatalln(err)
 		return
 	}
 
-	index := rand.Int() % len(quotes)
-	label := widget.NewLabel(quotes[index].Text)
+	index := rand.Int() % len(quoteList)
+	label := widget.NewLabel(quoteList[index].Text)
 	label.Wrapping = fyne.TextWrapBreak
 	label.TextStyle = fyne.TextStyle{Italic: true}
 
 	randomButton := widget.NewButton("Random", func() {
-		index := rand.Int() % len(quotes)
-		label.SetText(quotes[index].Text)
+		index := rand.Int() % len(quoteList)
+		label.SetText(quoteList[index].Text)
 	})
 
 	w.SetContent(
