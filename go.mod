@@ -1,4 +1,4 @@
-module github.com/liambaumann/terry
+module github.com/MartinJindra/terry
 
 go 1.22.3
 

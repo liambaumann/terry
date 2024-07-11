@@ -4,7 +4,7 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package main
 
 import (
-	"github.com/liambaumann/terry/gui"
+	"github.com/MartinJindra/terry/gui"
 )
 
 func main() {

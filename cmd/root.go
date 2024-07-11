@@ -10,7 +10,7 @@ import (
 	"math/rand/v2"
 	"os"
 
-	"github.com/liambaumann/terry/quotes"
+	"github.com/MartinJindra/terry/quotes"
 	"github.com/spf13/cobra"
 )
 
