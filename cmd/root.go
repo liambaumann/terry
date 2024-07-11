@@ -4,23 +4,15 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	_ "embed"
 	"encoding/json"
 	"fmt"
 	"log"
 	"math/rand/v2"
 	"os"
 
+	"github.com/liambaumann/terry/quotes"
 	"github.com/spf13/cobra"
 )
-
-//go:embed quotes.json
-var fileContent []byte
-
-type Quote struct {
-	Text     string `json:"text"`
-	Category string `json:"category"`
-}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -34,10 +26,13 @@ var rootCmd = &cobra.Command{
 		cat, _ := cmd.Flags().GetString("category")
 		big, _ := cmd.Flags().GetBool("big")
 
-		byteResult := fileContent
+		byteResult, err := os.ReadFile("quotes.json")
+		if err != nil {
+			log.Fatalln(err)
+		}
 
-		var quotes []Quote
-		err := json.Unmarshal(byteResult, &quotes)
+		var quotes []quotes.Quote
+		err = json.Unmarshal(byteResult, &quotes)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -48,7 +43,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		if catValid(cat) {
-			var filtered []Quote
+			var filtered []quotes.Quote
 			for _, quote := range quotes {
 				if quote.Category == cat {
 					filtered = append(filtered, quote)
