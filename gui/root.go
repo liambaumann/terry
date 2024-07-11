@@ -1,8 +1,6 @@
 package gui
 
 import (
-	"encoding/json"
-	"log"
 	"math/rand/v2"
 	"os"
 
@@ -22,18 +20,7 @@ func Execute() {
 	a.SetIcon(icon)
 	w := a.NewWindow("Terry A. Davis")
 
-	byteResults, err := os.ReadFile("quotes.json")
-	if err != nil {
-		log.Fatalln(err)
-		return
-	}
-
-	var quoteList []quotes.Quote
-	err = json.Unmarshal(byteResults, &quoteList)
-	if err != nil {
-		log.Fatalln(err)
-		return
-	}
+	quoteList := quotes.GetQuotes()
 
 	index := rand.Int() % len(quoteList)
 	label := widget.NewLabel(quoteList[index].Text)

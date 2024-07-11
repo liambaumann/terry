@@ -4,9 +4,7 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 	"math/rand/v2"
 	"os"
 
@@ -26,16 +24,7 @@ var rootCmd = &cobra.Command{
 		cat, _ := cmd.Flags().GetString("category")
 		big, _ := cmd.Flags().GetBool("big")
 
-		byteResult, err := os.ReadFile("quotes.json")
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-		var quoteList []quotes.Quote
-		err = json.Unmarshal(byteResult, &quoteList)
-		if err != nil {
-			log.Fatalln(err)
-		}
+		quoteList := quotes.GetQuotes()
 
 		if cat != "" && !catValid(cat) {
 			fmt.Println("Category:", cat, "doesn't exist")
@@ -63,7 +52,7 @@ var rootCmd = &cobra.Command{
 		fmt.Print(quoteList[index].Text)
 		fmt.Println("\"")
 
-		if big == false {
+		if !big {
 			fmt.Println("― Terry A. Davis")
 			return
 		}
