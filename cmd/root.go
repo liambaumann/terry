@@ -7,10 +7,11 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
-	"github.com/spf13/cobra"
 	"log"
 	"math/rand/v2"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
 //go:embed quotes.json
@@ -32,7 +33,7 @@ var rootCmd = &cobra.Command{
 
 		cat, _ := cmd.Flags().GetString("category")
 		big, _ := cmd.Flags().GetBool("big")
-		
+
 		byteResult := fileContent
 
 		var quotes []Quote
