@@ -1,8 +1,8 @@
 package gui
 
 import (
+	_ "embed"
 	"math/rand/v2"
-	"os"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -11,12 +11,14 @@ import (
 	"github.com/MartinJindra/terry/quotes"
 )
 
+//go:embed Icon.png
+var iconBytes []byte
+
 func Execute() {
 
-	a := app.New()
+	icon := (fyne.NewStaticResource("Icon.png", iconBytes))
 
-	iconBytes, _ := os.ReadFile("Icon.png")
-	icon := (fyne.NewStaticResource("terry", iconBytes))
+	a := app.New()
 	a.SetIcon(icon)
 	w := a.NewWindow("Terry A. Davis")
 
