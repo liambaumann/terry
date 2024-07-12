@@ -6,6 +6,7 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 	"github.com/MartinJindra/terry/quotes"
@@ -34,7 +35,7 @@ func Execute() {
 
 	w.SetContent(
 		container.NewAdaptiveGrid(1,
-			widget.NewIcon(icon),
+			canvas.NewImageFromResource(icon),
 			container.NewBorder(
 				label,
 				randomButton,
