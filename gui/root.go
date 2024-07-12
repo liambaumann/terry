@@ -1,7 +1,7 @@
 package gui
 
 import (
-	_ "embed"
+	b64 "encoding/base64"
 	"math/rand/v2"
 
 	"fyne.io/fyne/v2"
@@ -9,14 +9,12 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 	"github.com/MartinJindra/terry/quotes"
+	"github.com/MartinJindra/terry/res"
 )
 
-//go:embed Icon.png
-var iconBytes []byte
-
 func Execute() {
-
-	icon := (fyne.NewStaticResource("Icon.png", iconBytes))
+	imageBytes, _ := b64.StdEncoding.DecodeString(res.GetImageEncoded())
+	icon := (fyne.NewStaticResource("Icon.png", imageBytes))
 
 	a := app.New()
 	a.SetIcon(icon)
