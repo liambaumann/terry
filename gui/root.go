@@ -16,6 +16,8 @@ import (
 func Execute() {
 	imageBytes, _ := b64.StdEncoding.DecodeString(res.GetImageEncoded())
 	icon := (fyne.NewStaticResource("Icon.png", imageBytes))
+	image := canvas.NewImageFromResource(icon)
+	image.SetMinSize(fyne.NewSize(300, 400))
 
 	a := app.New()
 	a.SetIcon(icon)
@@ -27,6 +29,7 @@ func Execute() {
 	label := widget.NewLabel(quoteList[index].Text)
 	label.Wrapping = fyne.TextWrapBreak
 	label.TextStyle = fyne.TextStyle{Italic: true}
+	label.Resize(fyne.NewSize(300, 400))
 
 	randomButton := widget.NewButton("Random", func() {
 		index := rand.Int() % len(quoteList)
@@ -34,18 +37,16 @@ func Execute() {
 	})
 
 	w.SetContent(
-		container.NewAdaptiveGrid(1,
-			canvas.NewImageFromResource(icon),
-			container.NewBorder(
-				label,
-				randomButton,
-				nil,
-				nil,
-			),
+		container.NewBorder(
+			image,
+			randomButton,
+			nil,
+			nil,
+			label,
 		),
 	)
-	w.Resize(fyne.NewSize(400, 300))
+	// w.Resize(fyne.NewSize(400, 300))
 	w.CenterOnScreen()
-	w.SetFixedSize(true)
+	// w.SetFixedSize(true)
 	w.ShowAndRun()
 }
