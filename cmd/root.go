@@ -8,6 +8,7 @@ import (
 	"math/rand/v2"
 	"os"
 
+	guiApp "github.com/MartinJindra/terry/gui"
 	"github.com/MartinJindra/terry/quotes"
 	"github.com/spf13/cobra"
 )
@@ -23,6 +24,12 @@ var rootCmd = &cobra.Command{
 
 		cat, _ := cmd.Flags().GetString("category")
 		big, _ := cmd.Flags().GetBool("big")
+		gui, _ := cmd.Flags().GetBool("gui")
+
+		if gui {
+			guiApp.Execute()
+			return
+		}
 
 		quoteList := quotes.GetQuotes()
 
@@ -72,6 +79,7 @@ func Execute() {
 func init() {
 	rootCmd.Flags().StringP("category", "c", "", "Filter quotes by category")
 	rootCmd.Flags().BoolP("big", "b", false, "Write Terry A. Davis' Name in big ASCII art")
+	rootCmd.Flags().BoolP("gui", "g", false, "Open the Terry A. Davis GUI")
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
